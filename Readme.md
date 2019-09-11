@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дмитрий Ивлев](https://up.htmlacademy.ru/javascript/18/user/238101).
-* Наставник: `Неизвестно`.
+* Наставник: [Игорь Антонов](https://github.com/AntonovIgor).
 
 ---
 
