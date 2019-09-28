@@ -38,13 +38,17 @@ var pinSize = {
   width: 75,
   height: 87
 };
+var limitsY = {
+  min: 130,
+  max: 630
+}
 
 var getPinsMocks = function (count) {
   var pins = [];
   for (var i = 0; i < count; i++) {
     var coordinate = {
       x: generateRandomNumber(0, mapSizes.width - pinSize.width),
-      y: generateRandomNumber(130, 630)
+      y: generateRandomNumber(limitsY.min, limitsY.max)
     };
     var element = {
       author: {
