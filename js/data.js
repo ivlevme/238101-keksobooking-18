@@ -28,7 +28,7 @@
 
   var avatar = {
     src: 'img/avatars/user',
-    fitstNumber: '0',
+    firstNumber: 0,
     expansion: '.png'
   };
   var offer = {

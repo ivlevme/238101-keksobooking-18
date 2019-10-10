@@ -14,7 +14,7 @@
     hundred: '100 комнат — «не для гостей»'
   };
 
-  var activatePage = function () {
+  var onMapPinMainClick = function () {
     mapContainer.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
@@ -22,11 +22,11 @@
     changeFormElements(mapFilters, tags.select, !DISABLED);
     changeFormElements(mapFilters, tags.fieldset, !DISABLED);
 
-    var PinLocation = {
+    var pinLocation = {
       x: defaultPinLocation.x + pinSize.width,
       y: defaultPinLocation.y + pinSize.height
     };
-    inputAddress.value = PinLocation.x + ', ' + PinLocation.y;
+    inputAddress.value = pinLocation.x + ', ' + pinLocation.y;
     mapOverlayContainer.appendChild(window.pinsFragment);
   };
 
@@ -42,7 +42,7 @@
     element.value = information;
   };
 
-  var onCustomValidate = function () {
+  var onAdFormSubmit = function () {
     var inputRooms = adForm.querySelector('select[name="rooms"]');
     var inputCapacity = adForm.querySelector('select[name="capacity"]');
 
@@ -129,11 +129,11 @@
   changeInputValue(inputAddress, inputAddressValue);
 
   var adFormSubmit = adForm.querySelector('.ad-form__submit');
-  adFormSubmit.addEventListener('click', onCustomValidate);
+  adFormSubmit.addEventListener('submit', onAdFormSubmit);
 
   window.form = {
     mapContainer: mapContainer,
     mapPinMain: mapPinMain,
-    activatePage: activatePage
+    onMapPinMainClick: onMapPinMainClick
   };
 })();
