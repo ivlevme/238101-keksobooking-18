@@ -2,6 +2,10 @@
 
 (function () {
   var DISABLED = true;
+  var pinSize = {
+    width: 75,
+    height: 87
+  };
   var tags = {
     fieldset: 'fieldset',
     select: 'select'
@@ -15,6 +19,7 @@
   };
 
   var onMapPinMainClick = function () {
+    window.backend.load(onLoadSuccess, onLoadError);
     mapContainer.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
@@ -27,7 +32,6 @@
       y: defaultPinLocation.y + pinSize.height
     };
     inputAddress.value = pinLocation.x + ', ' + pinLocation.y;
-    mapOverlayContainer.appendChild(window.pinsFragment);
   };
 
   var changeFormElements = function (form, tagElement, status) {
@@ -106,9 +110,26 @@
     return errorFlag;
   };
 
+  var onLoadError = function (message) {
+    var errorTemplate = document.querySelector('#error')
+      .content
+      .querySelector('.error');
+    var error = errorTemplate.cloneNode(true);
+    var errorMessageText = error.querySelector('.error__message');
+    errorMessageText.textContent = message;
+    main.appendChild(error);
+  };
+
+  var onLoadSuccess = function (data) {
+    pinsFragment = generatePins(data);
+    mapOverlayContainer.appendChild(pinsFragment);
+  };
+
+  var pinsFragment;
   var mapContainer = document.querySelector('.map');
   var mapPinMain = mapContainer.querySelector('.map__pin--main');
-  var pinSize = window.data.pinSize;
+  var generatePins = window.generatePins;
+  var main = document.querySelector('main');
 
   var defaultPinLocation = {
     x: parseInt(mapPinMain.style.left.substring(0, mapPinMain.style.left.length - 2), 10),
