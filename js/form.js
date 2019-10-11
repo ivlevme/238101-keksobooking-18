@@ -2,6 +2,10 @@
 
 (function () {
   var DISABLED = true;
+  var pinSize = {
+    width: 75,
+    height: 87
+  };
   var tags = {
     fieldset: 'fieldset',
     select: 'select'
@@ -14,7 +18,8 @@
     hundred: '100 комнат — «не для гостей»'
   };
 
-  var activatePage = function () {
+  var onMapPinMainClick = function () {
+    window.backend.load(onLoadSuccess, onLoadError);
     mapContainer.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
@@ -22,12 +27,11 @@
     changeFormElements(mapFilters, tags.select, !DISABLED);
     changeFormElements(mapFilters, tags.fieldset, !DISABLED);
 
-    var PinLocation = {
+    var pinLocation = {
       x: defaultPinLocation.x + pinSize.width,
       y: defaultPinLocation.y + pinSize.height
     };
-    inputAddress.value = PinLocation.x + ', ' + PinLocation.y;
-    mapOverlayContainer.appendChild(window.pinsFragment);
+    inputAddress.value = pinLocation.x + ', ' + pinLocation.y;
   };
 
   var changeFormElements = function (form, tagElement, status) {
@@ -42,7 +46,7 @@
     element.value = information;
   };
 
-  var onCustomValidate = function () {
+  var onAdFormSubmit = function () {
     var inputRooms = adForm.querySelector('select[name="rooms"]');
     var inputCapacity = adForm.querySelector('select[name="capacity"]');
 
@@ -106,9 +110,26 @@
     return errorFlag;
   };
 
+  var onLoadError = function (message) {
+    var errorTemplate = document.querySelector('#error')
+      .content
+      .querySelector('.error');
+    var error = errorTemplate.cloneNode(true);
+    var errorMessageText = error.querySelector('.error__message');
+    errorMessageText.textContent = message;
+    main.appendChild(error);
+  };
+
+  var onLoadSuccess = function (data) {
+    pinsFragment = generatePins(data);
+    mapOverlayContainer.appendChild(pinsFragment);
+  };
+
+  var pinsFragment;
   var mapContainer = document.querySelector('.map');
   var mapPinMain = mapContainer.querySelector('.map__pin--main');
-  var pinSize = window.data.pinSize;
+  var generatePins = window.generatePins;
+  var main = document.querySelector('main');
 
   var defaultPinLocation = {
     x: parseInt(mapPinMain.style.left.substring(0, mapPinMain.style.left.length - 2), 10),
@@ -129,11 +150,11 @@
   changeInputValue(inputAddress, inputAddressValue);
 
   var adFormSubmit = adForm.querySelector('.ad-form__submit');
-  adFormSubmit.addEventListener('click', onCustomValidate);
+  adFormSubmit.addEventListener('submit', onAdFormSubmit);
 
   window.form = {
     mapContainer: mapContainer,
     mapPinMain: mapPinMain,
-    activatePage: activatePage
+    onMapPinMainClick: onMapPinMainClick
   };
 })();
