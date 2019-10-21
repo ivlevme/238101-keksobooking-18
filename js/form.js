@@ -2,35 +2,38 @@
 
 (function () {
   var DISABLED = true;
-  var pinSize = {
-    width: 75,
-    height: 87
+
+  var PinSize = {
+    WIDTH: 75,
+    HEIGHT: 87
   };
-  var tags = {
-    fieldset: 'fieldset',
-    select: 'select'
+  var Tags = {
+    FIELDSET: 'fieldset',
+    SELECT: 'select'
   };
 
-  var roomsErrorText = {
-    one: '1 комната — «для 1 гостя»',
-    two: '2 комнаты — «для 2 гостей» или «для 1 гостя»',
-    three: '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»',
-    hundred: '100 комнат — «не для гостей»'
+  var RoomsErrorText = {
+    ONE: '1 комната — «для 1 гостя»',
+    TWO: '2 комнаты — «для 2 гостей» или «для 1 гостя»',
+    THREE: '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»',
+    HUNDRED: '100 комнат — «не для гостей»'
   };
 
   var onMapPinMainClick = function () {
-    window.backend.load(onLoadSuccess, onLoadError);
-    mapContainer.classList.remove('map--faded');
+    load(onLoadSuccess, onLoadError);
+
+    map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    changeFormElements(adForm, tags.fieldset, !DISABLED);
-    changeFormElements(mapFilters, tags.select, !DISABLED);
-    changeFormElements(mapFilters, tags.fieldset, !DISABLED);
+    changeFormElements(adForm, Tags.FIELDSET, !DISABLED);
+    changeFormElements(mapFilters, Tags.SELECT, !DISABLED);
+    changeFormElements(mapFilters, Tags.FIELDSET, !DISABLED);
 
     var pinLocation = {
-      x: defaultPinLocation.x + pinSize.width,
-      y: defaultPinLocation.y + pinSize.height
+      x: defaultPinLocation.x + PinSize.WIDTH,
+      y: defaultPinLocation.y + PinSize.HEIGHT
     };
+
     inputAddress.value = pinLocation.x + ', ' + pinLocation.y;
   };
 
@@ -63,32 +66,27 @@
     var roomsThree = parseInt(inputRooms.options[2].value, 10);
     var roomsHundred = parseInt(inputRooms.options[3].value, 10);
 
-    var validRatiosRoomsGuests = [
-      [roomOne, capacityOneGuests],
-      [roomsTwo, capacityTwoGuests],
-      [roomsTwo, capacityOneGuests],
-      [roomsThree, capacityThreeGuests],
-      [roomsThree, capacityTwoGuests],
-      [roomsThree, capacityOneGuests],
-      [roomsHundred, capacityNoGuests]
-    ];
+    var validRatiosRoomsGuests = {};
+    validRatiosRoomsGuests[roomOne] = [capacityOneGuests];
+    validRatiosRoomsGuests[roomsTwo] = [capacityTwoGuests, capacityOneGuests];
+    validRatiosRoomsGuests[roomsThree] = [capacityThreeGuests, capacityTwoGuests, capacityOneGuests];
+    validRatiosRoomsGuests[roomsHundred] = [capacityNoGuests];
 
-    var currentRatioRoomsGuests = [inputRoomsSelected, inputCapacitySelected];
-    var errorStatus = defineError(currentRatioRoomsGuests, validRatiosRoomsGuests,
+    var errorStatus = defineError(inputRoomsSelected, inputCapacitySelected, validRatiosRoomsGuests,
         inputRooms);
     if (errorStatus) {
       switch (inputRoomsSelected) {
         case roomOne:
-          inputRooms.setCustomValidity(roomsErrorText.one);
+          inputRooms.setCustomValidity(RoomsErrorText.ONE);
           break;
         case roomsTwo:
-          inputRooms.setCustomValidity(roomsErrorText.two);
+          inputRooms.setCustomValidity(RoomsErrorText.TWO);
           break;
         case roomsThree:
-          inputRooms.setCustomValidity(roomsErrorText.three);
+          inputRooms.setCustomValidity(RoomsErrorText.THREE);
           break;
         case roomsHundred:
-          inputRooms.setCustomValidity(roomsErrorText.hundred);
+          inputRooms.setCustomValidity(RoomsErrorText.HUNDRED);
           break;
         default:
           break;
@@ -96,16 +94,11 @@
     }
   };
 
-  var defineError = function (currentRatio, validRatios, inputError) {
+  var defineError = function (roomSelected, guestSelected, validRatios, inputError) {
     var errorFlag = true;
-    for (var i = 0; i < validRatios.length; i++) {
-      var firstLine = validRatios[i];
-      var j = 0;
-      if (currentRatio[j] === firstLine[j] && currentRatio[j + 1] === firstLine[j + 1]) {
-        errorFlag = false;
-        inputError.setCustomValidity('');
-        break;
-      }
+    if (validRatios[roomSelected].includes(guestSelected)) {
+      errorFlag = false;
+      inputError.setCustomValidity('');
     }
     return errorFlag;
   };
@@ -125,10 +118,12 @@
     mapOverlayContainer.appendChild(pinsFragment);
   };
 
+  var map = window.setup.map;
+  var generatePins = window.pin.generatePins;
+  var load = window.backend.load;
+
   var pinsFragment;
-  var mapContainer = document.querySelector('.map');
-  var mapPinMain = mapContainer.querySelector('.map__pin--main');
-  var generatePins = window.generatePins;
+  var mapPinMain = map.querySelector('.map__pin--main');
   var main = document.querySelector('main');
 
   var defaultPinLocation = {
@@ -138,23 +133,23 @@
 
   var notice = document.querySelector('.notice');
   var adForm = notice.querySelector('.ad-form');
-  var mapFilters = mapContainer.querySelector('.map__filters');
-  var mapOverlayContainer = mapContainer.querySelector('.map__pins');
+  var mapFilters = map.querySelector('.map__filters');
+  var mapOverlayContainer = map.querySelector('.map__pins');
 
-  changeFormElements(adForm, tags.fieldset, DISABLED);
-  changeFormElements(mapFilters, tags.select, DISABLED);
-  changeFormElements(mapFilters, tags.fieldset, DISABLED);
+  changeFormElements(adForm, Tags.FIELDSET, DISABLED);
+  changeFormElements(mapFilters, Tags.SELECT, DISABLED);
+  changeFormElements(mapFilters, Tags.FIELDSET, DISABLED);
 
   var inputAddress = adForm.querySelector('input[name="address"]');
   var inputAddressValue = defaultPinLocation.x + ', ' + defaultPinLocation.y;
   changeInputValue(inputAddress, inputAddressValue);
 
   var adFormSubmit = adForm.querySelector('.ad-form__submit');
-  adFormSubmit.addEventListener('submit', onAdFormSubmit);
+  adFormSubmit.addEventListener('click', onAdFormSubmit);
+
 
   window.form = {
-    mapContainer: mapContainer,
     mapPinMain: mapPinMain,
-    onMapPinMainClick: onMapPinMainClick
+    onMapPinMainClick: onMapPinMainClick,
   };
 })();
