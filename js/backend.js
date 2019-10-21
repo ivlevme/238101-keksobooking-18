@@ -1,46 +1,64 @@
 'use strict';
 
 (function () {
-  var TIME_UNIT = 'мс';
-
-  var url = {
-    load: 'https://js.dump.academy/keksobooking/data'
+  var Time = {
+    TIMEOUT: 3000,
+    UNIT: 'мс'
   };
-  var hxrParams = {
-    timeout: 3000,
-    status200: 200
-  };
-  var errorMessage = {
-    connect: 'Произошла ошибка соединения',
-    timeout: 'Запрос не успел выполниться за ',
-    response: 'Статус ответа: '
+  var Url = {
+    SAVE: '',
+    LOAD: 'https://js.dump.academy/keksobooking/data'
   };
 
-  var load = function (onLoad, onError) {
+  var HttpCode = {
+    OK: 200,
+    NOT_FOUND: 404
+  };
+
+  var ErrorMessage = {
+    CONNECT: 'Произошла ошибка соединения',
+    TIMEOUT: 'Запрос не успел выполниться за ',
+    RESPONSE: 'Статус ответа: '
+  };
+
+  var setupXHR = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === hxrParams.status200) {
+      if (xhr.status === HttpCode.OK) {
         onLoad(xhr.response);
       } else {
-        onError(errorMessage.response + xhr.status + ' ' + xhr.statusText);
+        onError(ErrorMessage.RESPONSE + xhr.status + ' ' + xhr.statusText);
       }
     });
     xhr.addEventListener('error', function () {
-      onError(errorMessage.connect);
+      onError(ErrorMessage.CONNECT);
     });
+
     xhr.addEventListener('timeout', function () {
-      onError(errorMessage.timeout + xhr.timeout + TIME_UNIT);
+      onError(ErrorMessage.TIMEOUT + xhr.timeout + Time.UNIT);
     });
 
-    xhr.timeout = hxrParams.timeout;
+    xhr.timeout = Time.TIMEOUT;
 
-    xhr.open('GET', url.load);
+    return xhr;
+  };
+
+  var save = function (onLoad, onError, data) {
+    var xhr = setupXHR(onLoad, onError);
+    xhr.open('POST', Url.SAVE);
+    xhr.send(data);
+  };
+
+  var load = function (onLoad, onError) {
+    var xhr = setupXHR(onLoad, onError);
+    xhr.open('GET', Url.LOAD);
     xhr.send();
   };
 
   window.backend = {
-    load: load
+    load: load,
+    save: save
   };
 })();
