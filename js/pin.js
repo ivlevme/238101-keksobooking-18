@@ -8,8 +8,8 @@
       if (!('offer' in item)) {
         return;
       }
-      pin.style.left = item.location.x.toString() + 'px';
-      pin.style.top = item.location.y.toString() + 'px';
+      pin.style.left = item.location.x.toString() + MEASURE_PX;
+      pin.style.top = item.location.y.toString() + MEASURE_PX;
 
       var imgPin = pin.querySelector('img');
       imgPin.src = item.author.avatar;
@@ -29,6 +29,7 @@
   };
 
   var generateCard = window.card.generateCard;
+  var MEASURE_PX = window.setup.MEASURE_PX;
 
   var pinTemplate = document.querySelector('#pin')
   .content
