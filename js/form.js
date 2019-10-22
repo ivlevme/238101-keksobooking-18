@@ -4,10 +4,6 @@
   var DISABLED = true;
   var ATTRIBUTE_MIN = 'min';
 
-  var PinSize = {
-    WIDTH: 75,
-    HEIGHT: 87
-  };
   var Tags = {
     FIELDSET: 'fieldset',
     SELECT: 'select'
@@ -50,13 +46,6 @@
     changeFormElements(adForm, Tags.FIELDSET, !DISABLED);
     changeFormElements(mapFilters, Tags.SELECT, !DISABLED);
     changeFormElements(mapFilters, Tags.FIELDSET, !DISABLED);
-
-    var pinLocation = {
-      x: defaultPinLocation.x + PinSize.WIDTH,
-      y: defaultPinLocation.y + PinSize.HEIGHT
-    };
-
-    inputAddress.value = pinLocation.x + ', ' + pinLocation.y;
   };
 
   var changeFormElements = function (form, tagElement, status) {
@@ -65,10 +54,6 @@
     elements.forEach(function (item) {
       item.disabled = status;
     });
-  };
-
-  var changeInputValue = function (element, information) {
-    element.value = information;
   };
 
   var onAdFormSubmit = function () {
@@ -188,11 +173,6 @@
   var mapPinMain = map.querySelector('.map__pin--main');
   var main = document.querySelector('main');
 
-  var defaultPinLocation = {
-    x: parseInt(mapPinMain.style.left.substring(0, mapPinMain.style.left.length - 2), 10),
-    y: parseInt(mapPinMain.style.top.substring(0, mapPinMain.style.left.length - 2), 10)
-  };
-
   var notice = document.querySelector('.notice');
   var adForm = notice.querySelector('.ad-form');
   var mapFilters = map.querySelector('.map__filters');
@@ -204,8 +184,6 @@
 
   var inputAddress = adForm.querySelector('input[name="address"]');
   inputAddress.readOnly = true;
-  var inputAddressValue = defaultPinLocation.x + ', ' + defaultPinLocation.y;
-  changeInputValue(inputAddress, inputAddressValue);
 
   var adFormSubmit = adForm.querySelector('.ad-form__submit');
   adFormSubmit.addEventListener('click', onAdFormSubmit);
@@ -222,5 +200,6 @@
   window.form = {
     mapPinMain: mapPinMain,
     onMapPinMainClick: onMapPinMainClick,
+    inputAddress: inputAddress,
   };
 })();
