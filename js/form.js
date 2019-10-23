@@ -37,15 +37,21 @@
 
 
   var onMapPinMainClick = function () {
-    load(onLoadSuccess, onLoadError);
+    mapPinMain.removeEventListener('mousedown', onMapPinMainClick);
+    mapPinMain.removeEventListener('keydown', onMapPinMainEnterKeydown);
+
+    load(onLoadSuccess, onErrorHappen);
+
     checkHousePrice();
 
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+    manageForm(!DISABLED);
+    changeStatusPage(ClassListMethod.REMOVE);
+  };
 
-    changeFormElements(adForm, Tags.FIELDSET, !DISABLED);
-    changeFormElements(mapFilters, Tags.SELECT, !DISABLED);
-    changeFormElements(mapFilters, Tags.FIELDSET, !DISABLED);
+  var onMapPinMainEnterKeydown = function (evt) {
+    if (evt.key === KeyboardKey.ENTER) {
+      onMapPinMainClick();
+    }
   };
 
   var changeFormElements = function (form, tagElement, status) {
@@ -135,6 +141,7 @@
       case Time.IN:
         timeOut.value = timeIn.value;
         break;
+
       case Time.OUT:
         timeIn.value = timeOut.value;
         break;
@@ -150,43 +157,94 @@
     return errorFlag;
   };
 
-  var onLoadError = function (message) {
-    var errorTemplate = document.querySelector('#error')
-      .content
-      .querySelector('.error');
-    var error = errorTemplate.cloneNode(true);
-    var errorMessageText = error.querySelector('.error__message');
-    errorMessageText.textContent = message;
-    main.appendChild(error);
-  };
-
   var onLoadSuccess = function (data) {
     pinsFragment = generatePins(data);
-    mapOverlayContainer.appendChild(pinsFragment);
+    pinsContainer.appendChild(pinsFragment);
   };
 
+  var onSaveSuccess = function () {
+    var successTemplate = document.querySelector('#success')
+      .content
+      .querySelector('.success');
+    var success = successTemplate.cloneNode(true);
+    main.appendChild(success);
+
+    manageForm(DISABLED);
+    adForm.reset();
+    inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
+    (defaultPinLocation.y + middlePin.height);
+
+    changeStatusPage(ClassListMethod.ADD);
+
+    mapPinMain.addEventListener('mousedown', onMapPinMainClick);
+    document.addEventListener('click', onModalPopupClick);
+    document.addEventListener('keydown', onModalPopupEscKeydown);
+
+    var allPins = pinsContainer.querySelectorAll('.map__pin');
+    allPins.forEach(function (item) {
+      if (!item.classList.contains('map__pin--main')) {
+        item.remove();
+      }
+    });
+
+    var allPopups = map.querySelectorAll('.map__card');
+    allPopups.forEach(function (item) {
+      item.remove();
+    });
+
+    mapPinMain.style.left = defaultPinLocation.x + MEASURE_PX;
+    mapPinMain.style.top = defaultPinLocation.y + MEASURE_PX;
+  };
+
+  var manageForm = function (action) {
+    changeFormElements(adForm, Tags.FIELDSET, action);
+    changeFormElements(mapFilters, Tags.SELECT, action);
+    changeFormElements(mapFilters, Tags.FIELDSET, action);
+  };
+
+  var changeStatusPage = function (actClass) {
+    map.classList[actClass]('map--faded');
+    adForm.classList[actClass]('ad-form--disabled');
+  };
+
+  var MEASURE_PX = window.setup.MEASURE_PX;
+  var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
+  var middlePin = window.setup.middlePin;
   var map = window.setup.map;
+  var mapPinMain = window.setup.mapPinMain;
+  var main = window.setup.main;
+  var KeyboardKey = window.setup.KeyboardKey;
+  var ClassListMethod = window.setup.ClassListMethod;
+
   var generatePins = window.pin.generatePins;
+
   var load = window.backend.load;
+  var save = window.backend.save;
+
+  var onErrorHappen = window.error.onErrorHappen;
+  var onModalPopupClick = window.error.onModalPopupClick;
+  var onModalPopupEscKeydown = window.error.onModalPopupEscKeydown;
 
   var pinsFragment;
-  var mapPinMain = map.querySelector('.map__pin--main');
-  var main = document.querySelector('main');
 
   var notice = document.querySelector('.notice');
   var adForm = notice.querySelector('.ad-form');
   var mapFilters = map.querySelector('.map__filters');
-  var mapOverlayContainer = map.querySelector('.map__pins');
+  var pinsContainer = map.querySelector('.map__pins');
 
-  changeFormElements(adForm, Tags.FIELDSET, DISABLED);
-  changeFormElements(mapFilters, Tags.SELECT, DISABLED);
-  changeFormElements(mapFilters, Tags.FIELDSET, DISABLED);
+  manageForm(DISABLED);
 
   var inputAddress = adForm.querySelector('input[name="address"]');
   inputAddress.readOnly = true;
 
   var adFormSubmit = adForm.querySelector('.ad-form__submit');
   adFormSubmit.addEventListener('click', onAdFormSubmit);
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    var formData = new FormData(adForm);
+
+    save(onSaveSuccess, onErrorHappen, formData);
+  });
 
   var typeHouse = adForm.querySelector('#type');
   typeHouse.addEventListener('click', checkHousePrice);
@@ -197,9 +255,16 @@
   timeIn.addEventListener('click', checkTime);
   timeOut.addEventListener('click', checkTime);
 
+  var defaultPinLocation = {
+    x: parseInt(mapPinMain.style.left.substring(0, mapPinMain.style.left.length - 2), 10),
+    y: parseInt(mapPinMain.style.top.substring(0, mapPinMain.style.left.length - 2), 10)
+  };
+
   window.form = {
     mapPinMain: mapPinMain,
     onMapPinMainClick: onMapPinMainClick,
+    onMapPinMainEnterKeydown: onMapPinMainEnterKeydown,
     inputAddress: inputAddress,
+    defaultPinLocation: defaultPinLocation
   };
 })();

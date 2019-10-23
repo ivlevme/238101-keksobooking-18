@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  var ENTER = 'Enter';
-  var PUNCTUATION_COMMA = ',';
-
   var LimitY = {
     MIN: 130,
     MAX: 630
@@ -93,27 +90,19 @@
     }
   };
 
-  var onMapPinClick = function () {
-    onMapPinMainClick();
-    mapPinMain.removeEventListener('mousedown', onMapPinClick);
-    mapPinMain.removeEventListener('keydown', onMapPinMainEnterKeydown);
-  };
-
-  var onMapPinMainEnterKeydown = function (evt) {
-    if (evt.key === ENTER) {
-      onMapPinMainClick();
-      mapPinMain.removeEventListener('mousedown', onMapPinClick);
-      mapPinMain.removeEventListener('keydown', onMapPinMainEnterKeydown);
-    }
-  };
-
   var map = window.setup.map;
+  var middlePin = window.setup.middlePin;
   var mapPinMain = window.form.mapPinMain;
   var onMapPinMainClick = window.form.onMapPinMainClick;
   var inputAddress = window.form.inputAddress;
   var MEASURE_PX = window.setup.MEASURE_PX;
+  var onMapPinMainEnterKeydown = window.form.onMapPinMainEnterKeydown;
+  var defaultPinLocation = window.form.defaultPinLocation;
+  var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
 
-  mapPinMain.addEventListener('mousedown', onMapPinClick);
+  var pinLocation;
+
+  mapPinMain.addEventListener('mousedown', onMapPinMainClick);
   mapPinMain.addEventListener('mousedown', onMouseDown);
   mapPinMain.addEventListener('keydown', onMapPinMainEnterKeydown);
 
@@ -123,18 +112,7 @@
     max: mapOverlay.offsetWidth
   };
 
-  var defaultPinLocation = {
-    x: parseInt(mapPinMain.style.left.substring(0, mapPinMain.style.left.length - 2), 10),
-    y: parseInt(mapPinMain.style.top.substring(0, mapPinMain.style.left.length - 2), 10)
-  };
-
-  var middlePin = {
-    width: Math.floor(mapPinMain.offsetWidth / 2),
-    height: Math.floor(mapPinMain.offsetHeight / 2)
-  };
-
   inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
     (defaultPinLocation.y + middlePin.height);
 
-  var pinLocation;
 })();
