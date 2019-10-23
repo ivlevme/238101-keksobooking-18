@@ -1,11 +1,6 @@
 'use strict';
 
 (function () {
-  var KeyboardKey = {
-    ESC: 'Escape',
-    ENTER: 'Enter'
-  };
-
   var Tag = {
     ARTICLE: 'article',
     BUTTON: 'button',
@@ -41,11 +36,6 @@
   var TimeText = {
     CHECKIN: 'Заезд после',
     CHECKOUT: ''
-  };
-
-  var ClassListMethod = {
-    ADD: 'add',
-    REMOVE: 'remove'
   };
 
   var NameClass = {
@@ -236,10 +226,12 @@
   var closeCard = function (card) {
     document.removeEventListener('keydown', currentOnPopupEscKeydown);
     card.classList.add(NameClass.HIDDEN);
-    hideActiveElement('button', 'remove', NameClass.ACTIVE);
+    hideActiveElement(Tag.BUTTON, ClassListMethod.REMOVE, NameClass.ACTIVE);
   };
 
   var map = window.setup.map;
+  var KeyboardKey = window.setup.KeyboardKey;
+  var ClassListMethod = window.setup.ClassListMethod;
 
   var currentOnPopupEscKeydown;
 

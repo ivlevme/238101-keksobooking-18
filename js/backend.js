@@ -6,7 +6,7 @@
     UNIT: 'мс'
   };
   var Url = {
-    SAVE: '',
+    SAVE: 'https://js.dump.academy/keksobooking',
     LOAD: 'https://js.dump.academy/keksobooking/data'
   };
 
