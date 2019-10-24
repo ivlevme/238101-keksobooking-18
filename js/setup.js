@@ -14,8 +14,20 @@
     REMOVE: 'remove'
   };
 
+  var delPinButtons = function () {
+    var allPins = pinsContainer.querySelectorAll('.map__pin');
+    allPins.forEach(function (item) {
+      if (!item.classList.contains('map__pin--main')) {
+        item.remove();
+      }
+    });
+  };
+
   var map = document.querySelector('.map');
   var main = document.querySelector('main');
+  var mapFilterContainer = map.querySelector('.map__filters-container');
+  var pinsContainer = map.querySelector('.map__pins');
+
 
   var mapPinMain = map.querySelector('.map__pin--main');
 
@@ -27,11 +39,14 @@
   window.setup = {
     map: map,
     main: main,
+    mapFilterContainer: mapFilterContainer,
+    pinsContainer: pinsContainer,
     mapPinMain: mapPinMain,
     middlePin: middlePin,
     MEASURE_PX: MEASURE_PX,
     PUNCTUATION_COMMA: PUNCTUATION_COMMA,
     KeyboardKey: KeyboardKey,
-    ClassListMethod: ClassListMethod
+    ClassListMethod: ClassListMethod,
+    delPinButtons: delPinButtons
   };
 })();
