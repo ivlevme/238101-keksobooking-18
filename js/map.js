@@ -92,13 +92,14 @@
 
   var map = window.setup.map;
   var middlePin = window.setup.middlePin;
+  var MEASURE_PX = window.setup.MEASURE_PX;
+  var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
+
   var mapPinMain = window.form.mapPinMain;
   var onMapPinMainClick = window.form.onMapPinMainClick;
   var inputAddress = window.form.inputAddress;
-  var MEASURE_PX = window.setup.MEASURE_PX;
   var onMapPinMainEnterKeydown = window.form.onMapPinMainEnterKeydown;
   var defaultPinLocation = window.form.defaultPinLocation;
-  var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
 
   var pinLocation;
 

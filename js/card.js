@@ -68,7 +68,6 @@
     var popupDescription = card.querySelector('.popup__description');
 
     fillField(popupTitle, OfferPinStructure.TITLE, element.offer);
-
     fillField(popupAddress, OfferPinStructure.ADDRESS, element.offer);
 
     if (checkAvailableField(OfferPinStructure.PRICE, element.offer)) {
@@ -130,7 +129,6 @@
       hideField(popupFeatures);
     }
 
-
     fillField(popupDescription, OfferPinStructure.DESCRIPTION, element.offer);
 
     var popupPhotos = card.querySelector('.popup__photos');
@@ -158,6 +156,12 @@
     pin.classList.add(NameClass.ACTIVE);
 
     mapFilterContainer.before(card);
+  };
+
+  var closeCard = function (card) {
+    document.removeEventListener('keydown', currentOnPopupEscKeydown);
+    card.classList.add(NameClass.HIDDEN);
+    hideActiveElement(Tag.BUTTON, ClassListMethod.REMOVE, NameClass.ACTIVE);
   };
 
   var onPopupCloseClick = function (card) {
@@ -223,19 +227,13 @@
     }
   };
 
-  var closeCard = function (card) {
-    document.removeEventListener('keydown', currentOnPopupEscKeydown);
-    card.classList.add(NameClass.HIDDEN);
-    hideActiveElement(Tag.BUTTON, ClassListMethod.REMOVE, NameClass.ACTIVE);
-  };
-
   var map = window.setup.map;
   var KeyboardKey = window.setup.KeyboardKey;
   var ClassListMethod = window.setup.ClassListMethod;
+  var mapFilterContainer = window.setup.mapFilterContainer;
 
   var currentOnPopupEscKeydown;
 
-  var mapFilterContainer = map.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');

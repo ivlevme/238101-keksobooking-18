@@ -108,6 +108,15 @@
     }
   };
 
+  var defineError = function (roomSelected, guestSelected, validRatios, inputError) {
+    var errorFlag = true;
+    if (validRatios[roomSelected].includes(guestSelected)) {
+      errorFlag = false;
+      inputError.setCustomValidity('');
+    }
+    return errorFlag;
+  };
+
   var checkHousePrice = function () {
     var typeHouseSelected = typeHouse.value;
 
@@ -148,18 +157,8 @@
     }
   };
 
-  var defineError = function (roomSelected, guestSelected, validRatios, inputError) {
-    var errorFlag = true;
-    if (validRatios[roomSelected].includes(guestSelected)) {
-      errorFlag = false;
-      inputError.setCustomValidity('');
-    }
-    return errorFlag;
-  };
-
   var onLoadSuccess = function (data) {
-    pinsFragment = generatePins(data);
-    pinsContainer.appendChild(pinsFragment);
+    updatePins(data);
   };
 
   var onSaveSuccess = function () {
@@ -171,6 +170,7 @@
 
     manageForm(DISABLED);
     adForm.reset();
+    mapFilters.reset();
     inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
     (defaultPinLocation.y + middlePin.height);
 
@@ -180,12 +180,7 @@
     document.addEventListener('click', onModalPopupClick);
     document.addEventListener('keydown', onModalPopupEscKeydown);
 
-    var allPins = pinsContainer.querySelectorAll('.map__pin');
-    allPins.forEach(function (item) {
-      if (!item.classList.contains('map__pin--main')) {
-        item.remove();
-      }
-    });
+    delPinButtons();
 
     var allPopups = map.querySelectorAll('.map__card');
     allPopups.forEach(function (item) {
@@ -207,6 +202,7 @@
     adForm.classList[actClass]('ad-form--disabled');
   };
 
+
   var MEASURE_PX = window.setup.MEASURE_PX;
   var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
   var middlePin = window.setup.middlePin;
@@ -215,8 +211,9 @@
   var main = window.setup.main;
   var KeyboardKey = window.setup.KeyboardKey;
   var ClassListMethod = window.setup.ClassListMethod;
+  var delPinButtons = window.setup.delPinButtons;
 
-  var generatePins = window.pin.generatePins;
+  var updatePins = window.pin.updatePins;
 
   var load = window.backend.load;
   var save = window.backend.save;
@@ -225,12 +222,10 @@
   var onModalPopupClick = window.error.onModalPopupClick;
   var onModalPopupEscKeydown = window.error.onModalPopupEscKeydown;
 
-  var pinsFragment;
 
   var notice = document.querySelector('.notice');
   var adForm = notice.querySelector('.ad-form');
   var mapFilters = map.querySelector('.map__filters');
-  var pinsContainer = map.querySelector('.map__pins');
 
   manageForm(DISABLED);
 
