@@ -239,6 +239,7 @@
     .querySelector('.map__card');
 
   window.card = {
-    generateCard: generateCard
+    generateCard: generateCard,
+    OfferPinStructure: OfferPinStructure
   };
 })();
