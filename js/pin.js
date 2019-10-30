@@ -51,6 +51,7 @@
   };
 
   var updatePins = function (pins) {
+    delPopupCard();
     uploadedPins = pins;
     delPinButtons();
     var filteredData = checkFilter(uploadedPins);
@@ -197,6 +198,7 @@
   var mapFilterContainer = window.setup.mapFilterContainer;
   var pinsContainer = window.setup.pinsContainer;
   var delPinButtons = window.setup.delPinButtons;
+  var delPopupCard = window.setup.delPopupCard;
 
   var generateCard = window.card.generateCard;
   var OfferPinStructure = window.card.OfferPinStructure;

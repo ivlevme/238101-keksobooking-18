@@ -27,10 +27,9 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === HttpCode.OK) {
-        onLoad(xhr.response);
-      } else {
-        onError(ErrorMessage.RESPONSE + xhr.status + ' ' + xhr.statusText);
+        return onLoad(xhr.response);
       }
+      return onError(ErrorMessage.RESPONSE + xhr.status + ' ' + xhr.statusText);
     });
     xhr.addEventListener('error', function () {
       onError(ErrorMessage.CONNECT);

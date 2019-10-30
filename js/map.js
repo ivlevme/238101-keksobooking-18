@@ -16,36 +16,24 @@
     Y: 'y'
   };
 
+  var Coordinate = function (x, y) {
+    this.x = x;
+    this.y = y;
+  };
+
   var onMouseDown = function (evt) {
-    pinLocation = {
-      x: mapPinMain.offsetLeft,
-      y: mapPinMain.offsetTop
-    };
+    pinLocation = new Coordinate(mapPinMain.offsetLeft, mapPinMain.offsetTop);
 
     fillAddress(evt);
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+    var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
-      pinLocation = {
-        x: mapPinMain.offsetLeft - shift.x,
-        y: mapPinMain.offsetTop - shift.y
-      };
+      var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
+      startCoords = new Coordinate(moveEvt.clientX, moveEvt.clientY);
+      pinLocation = new Coordinate(mapPinMain.offsetLeft - shift.x, mapPinMain.offsetTop - shift.y);
 
       checkOverLimit(pinLocation, StructureLocation.X, LimitX.max - middlePin.width);
       checkUnderLimit(pinLocation, StructureLocation.X, LimitX.min - middlePin.width);

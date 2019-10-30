@@ -44,9 +44,7 @@
     load(onLoadSuccess, onErrorHappen);
 
     checkHousePrice();
-
-    manageForm(!DISABLED);
-    changeStatusPage(ClassListMethod.REMOVE);
+    activatePage();
   };
 
   var onMapPinMainEnterKeydown = function (evt) {
@@ -160,6 +158,34 @@
 
   var onLoadSuccess = function (data) {
     updatePins(data);
+    manageFilterForm(!DISABLED);
+  };
+
+  var deactivatePage = function () {
+    changeFormElements(adForm, Tags.FIELDSET, DISABLED);
+    manageFilterForm(DISABLED);
+    adForm.reset();
+    mapFilters.reset();
+    photoPreviewImage.src = PLUG_SRC;
+    avatarPreviewImage.src = PLUG_SRC;
+    inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
+    (defaultPinLocation.y + middlePin.height);
+
+    changeStatusPage(ClassListMethod.ADD);
+
+    delPinButtons();
+    mapPinMain.addEventListener('mousedown', onMapPinMainClick);
+    mapPinMain.addEventListener('keydown', onMapPinMainEnterKeydown);
+
+    delPopupCard();
+
+    mapPinMain.style.left = defaultPinLocation.x + MEASURE_PX;
+    mapPinMain.style.top = defaultPinLocation.y + MEASURE_PX;
+  };
+
+  var activatePage = function () {
+    changeFormElements(adForm, Tags.FIELDSET, !DISABLED);
+    changeStatusPage(ClassListMethod.REMOVE);
   };
 
   var onSaveSuccess = function () {
@@ -168,32 +194,12 @@
       .querySelector('.success');
     var success = successTemplate.cloneNode(true);
     main.appendChild(success);
-
-    manageForm(DISABLED);
-    adForm.reset();
-    mapFilters.reset();
-    inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
-    (defaultPinLocation.y + middlePin.height);
-
-    changeStatusPage(ClassListMethod.ADD);
-
-    mapPinMain.addEventListener('mousedown', onMapPinMainClick);
+    deactivatePage();
     document.addEventListener('click', onModalPopupClick);
     document.addEventListener('keydown', onModalPopupEscKeydown);
-
-    delPinButtons();
-
-    var allPopups = map.querySelectorAll('.map__card');
-    allPopups.forEach(function (item) {
-      item.remove();
-    });
-
-    mapPinMain.style.left = defaultPinLocation.x + MEASURE_PX;
-    mapPinMain.style.top = defaultPinLocation.y + MEASURE_PX;
   };
 
-  var manageForm = function (action) {
-    changeFormElements(adForm, Tags.FIELDSET, action);
+  var manageFilterForm = function (action) {
     changeFormElements(mapFilters, Tags.SELECT, action);
     changeFormElements(mapFilters, Tags.FIELDSET, action);
   };
@@ -214,6 +220,7 @@
   var KeyboardKey = window.setup.KeyboardKey;
   var ClassListMethod = window.setup.ClassListMethod;
   var delPinButtons = window.setup.delPinButtons;
+  var delPopupCard = window.setup.delPopupCard;
 
   var updatePins = window.pin.updatePins;
 
@@ -230,13 +237,13 @@
 
   var mapFilters = map.querySelector('.map__filters');
 
-  manageForm(DISABLED);
-
   var inputAddress = adForm.querySelector('input[name="address"]');
   inputAddress.readOnly = true;
 
   var adFormSubmit = adForm.querySelector('.ad-form__submit');
+  var adFormReset = adForm.querySelector('.ad-form__reset');
   adFormSubmit.addEventListener('click', onAdFormSubmit);
+  adFormReset.addEventListener('click', deactivatePage);
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     var formData = new FormData(adForm);
@@ -244,24 +251,22 @@
     save(onSaveSuccess, onErrorHappen, formData);
   });
 
-  adForm.addEventListener('reset', function () {
-    photoPreviewImage.src = PLUG_SRC;
-    avatarPreviewImage.src = PLUG_SRC;
-  });
 
   var typeHouse = adForm.querySelector('#type');
-  typeHouse.addEventListener('click', checkHousePrice);
+  typeHouse.addEventListener('change', checkHousePrice);
   var housePrice = adForm.querySelector('#price');
 
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
-  timeIn.addEventListener('click', checkTime);
-  timeOut.addEventListener('click', checkTime);
+  timeIn.addEventListener('change', checkTime);
+  timeOut.addEventListener('change', checkTime);
 
   var defaultPinLocation = {
     x: parseInt(mapPinMain.style.left.substring(0, mapPinMain.style.left.length - 2), 10),
     y: parseInt(mapPinMain.style.top.substring(0, mapPinMain.style.left.length - 2), 10)
   };
+
+  deactivatePage();
 
   window.form = {
     mapPinMain: mapPinMain,

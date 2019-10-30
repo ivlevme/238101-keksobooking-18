@@ -137,8 +137,6 @@
     photo.remove();
 
     if (element.offer.photos.length) {
-      hideField(popupPhotos);
-    } else {
       var fragmentPhotos = document.createDocumentFragment();
       element.offer.photos.forEach(function (item) {
         var photoItem = photo.cloneNode(false);
@@ -146,6 +144,8 @@
         fragmentPhotos.appendChild(photoItem);
       });
       popupPhotos.appendChild(fragmentPhotos);
+    } else {
+      hideField(popupPhotos);
     }
 
     var popupAvatar = card.querySelector('.popup__avatar');
@@ -240,6 +240,6 @@
 
   window.card = {
     generateCard: generateCard,
-    OfferPinStructure: OfferPinStructure
+    OfferPinStructure: OfferPinStructure,
   };
 })();

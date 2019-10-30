@@ -23,6 +23,13 @@
     });
   };
 
+  var delPopupCard = function () {
+    var allPopup = map.querySelectorAll('.popup');
+    allPopup.forEach(function (item) {
+      item.remove();
+    });
+  };
+
   var map = document.querySelector('.map');
   var main = document.querySelector('main');
   var mapFilterContainer = map.querySelector('.map__filters-container');
@@ -51,6 +58,7 @@
     PUNCTUATION_COMMA: PUNCTUATION_COMMA,
     KeyboardKey: KeyboardKey,
     ClassListMethod: ClassListMethod,
-    delPinButtons: delPinButtons
+    delPinButtons: delPinButtons,
+    delPopupCard: delPopupCard
   };
 })();
