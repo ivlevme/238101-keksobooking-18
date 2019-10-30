@@ -3,6 +3,7 @@
 (function () {
   var DISABLED = true;
   var ATTRIBUTE_MIN = 'min';
+  var PLUG_SRC = 'img/muffin-grey.svg';
 
   var Tags = {
     FIELDSET: 'fieldset',
@@ -209,6 +210,7 @@
   var map = window.setup.map;
   var mapPinMain = window.setup.mapPinMain;
   var main = window.setup.main;
+  var adForm = window.setup.adForm;
   var KeyboardKey = window.setup.KeyboardKey;
   var ClassListMethod = window.setup.ClassListMethod;
   var delPinButtons = window.setup.delPinButtons;
@@ -222,9 +224,10 @@
   var onModalPopupClick = window.error.onModalPopupClick;
   var onModalPopupEscKeydown = window.error.onModalPopupEscKeydown;
 
+  var photoPreviewImage = window.avatar.photoPreviewImage;
+  var avatarPreviewImage = window.avatar.avatarPreviewImage;
 
-  var notice = document.querySelector('.notice');
-  var adForm = notice.querySelector('.ad-form');
+
   var mapFilters = map.querySelector('.map__filters');
 
   manageForm(DISABLED);
@@ -239,6 +242,11 @@
     var formData = new FormData(adForm);
 
     save(onSaveSuccess, onErrorHappen, formData);
+  });
+
+  adForm.addEventListener('reset', function () {
+    photoPreviewImage.src = PLUG_SRC;
+    avatarPreviewImage.src = PLUG_SRC;
   });
 
   var typeHouse = adForm.querySelector('#type');
@@ -257,6 +265,7 @@
 
   window.form = {
     mapPinMain: mapPinMain,
+    adForm: adForm,
     onMapPinMainClick: onMapPinMainClick,
     onMapPinMainEnterKeydown: onMapPinMainEnterKeydown,
     inputAddress: inputAddress,

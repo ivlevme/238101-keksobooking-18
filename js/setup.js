@@ -28,6 +28,9 @@
   var mapFilterContainer = map.querySelector('.map__filters-container');
   var pinsContainer = map.querySelector('.map__pins');
 
+  var notice = document.querySelector('.notice');
+  var adForm = notice.querySelector('.ad-form');
+
 
   var mapPinMain = map.querySelector('.map__pin--main');
 
@@ -39,6 +42,7 @@
   window.setup = {
     map: map,
     main: main,
+    adForm: adForm,
     mapFilterContainer: mapFilterContainer,
     pinsContainer: pinsContainer,
     mapPinMain: mapPinMain,
