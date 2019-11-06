@@ -4,6 +4,13 @@
   var MEASURE_PX = 'px';
   var PUNCTUATION_COMMA = ',';
 
+  var TypeAccommodation = {
+    BUNGALO: 'bungalo',
+    FLAT: 'flat',
+    HOUSE: 'house',
+    PALACE: 'palace'
+  };
+
   var KeyboardKey = {
     ESC: 'Escape',
     ENTER: 'Enter'
@@ -56,6 +63,7 @@
     middlePin: middlePin,
     MEASURE_PX: MEASURE_PX,
     PUNCTUATION_COMMA: PUNCTUATION_COMMA,
+    TypeAccommodation: TypeAccommodation,
     KeyboardKey: KeyboardKey,
     ClassListMethod: ClassListMethod,
     delPinButtons: delPinButtons,

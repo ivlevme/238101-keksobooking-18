@@ -17,13 +17,6 @@
     HUNDRED: '100 комнат — «не для гостей»'
   };
 
-  var TypeAccommodation = {
-    BUNGALO: 'bungalo',
-    FLAT: 'flat',
-    HOUSE: 'house',
-    PALACE: 'palace'
-  };
-
   var PriceAccommodation = {
     BUNGALO: 0,
     FLAT: 1000,
@@ -221,6 +214,7 @@
   var ClassListMethod = window.setup.ClassListMethod;
   var delPinButtons = window.setup.delPinButtons;
   var delPopupCard = window.setup.delPopupCard;
+  var TypeAccommodation = window.setup.TypeAccommodation;
 
   var updatePins = window.pin.updatePins;
 

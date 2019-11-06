@@ -76,19 +76,19 @@
   var checkHousingType = function (selectedType, data) {
     switch (selectedType) {
       case HousingType.PALACE:
-        data = filterCompare(data, HousingType.PALACE, OfferPinStructure.TYPE);
+        data = filterCompare(data, HousingType.PALACE, OfferPinSchema.TYPE);
         break;
 
       case HousingType.FLAT:
-        data = filterCompare(data, HousingType.FLAT, OfferPinStructure.TYPE);
+        data = filterCompare(data, HousingType.FLAT, OfferPinSchema.TYPE);
         break;
 
       case HousingType.HOUSE:
-        data = filterCompare(data, HousingType.HOUSE, OfferPinStructure.TYPE);
+        data = filterCompare(data, HousingType.HOUSE, OfferPinSchema.TYPE);
         break;
 
       case HousingType.BUNGALO:
-        data = filterCompare(data, HousingType.BUNGALO, OfferPinStructure.TYPE);
+        data = filterCompare(data, HousingType.BUNGALO, OfferPinSchema.TYPE);
         break;
     }
     return data;
@@ -122,15 +122,15 @@
 
     switch (selectedRooms) {
       case HousingRooms.ONE:
-        data = filterCompare(data, HousingRooms.ONE, OfferPinStructure.ROOMS);
+        data = filterCompare(data, HousingRooms.ONE, OfferPinSchema.ROOMS);
         break;
 
       case HousingRooms.TWO:
-        data = filterCompare(data, HousingRooms.TWO, OfferPinStructure.ROOMS);
+        data = filterCompare(data, HousingRooms.TWO, OfferPinSchema.ROOMS);
         break;
 
       case HousingRooms.THREE:
-        data = filterCompare(data, HousingRooms.THREE, OfferPinStructure.ROOMS);
+        data = filterCompare(data, HousingRooms.THREE, OfferPinSchema.ROOMS);
         break;
     }
 
@@ -142,15 +142,15 @@
 
     switch (selectedGuests) {
       case HousingGuests.ONE:
-        data = filterCompare(data, HousingGuests.ONE, OfferPinStructure.GUESTS);
+        data = filterCompare(data, HousingGuests.ONE, OfferPinSchema.GUESTS);
         break;
 
       case HousingGuests.TWO:
-        data = filterCompare(data, HousingGuests.TWO, OfferPinStructure.GUESTS);
+        data = filterCompare(data, HousingGuests.TWO, OfferPinSchema.GUESTS);
         break;
 
       case HousingGuests.NOTGUESTS:
-        data = filterCompare(data, HousingGuests.NOTGUESTS, OfferPinStructure.GUESTS);
+        data = filterCompare(data, HousingGuests.NOTGUESTS, OfferPinSchema.GUESTS);
         break;
     }
 
@@ -201,7 +201,7 @@
   var delPopupCard = window.setup.delPopupCard;
 
   var generateCard = window.card.generateCard;
-  var OfferPinStructure = window.card.OfferPinStructure;
+  var OfferPinSchema = window.card.OfferPinSchema;
 
   var pinTemplate = document.querySelector('#pin')
   .content

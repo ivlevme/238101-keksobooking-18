@@ -5,9 +5,15 @@
     TIMEOUT: 3000,
     UNIT: 'мс'
   };
+
   var Url = {
     SAVE: 'https://js.dump.academy/keksobooking',
     LOAD: 'https://js.dump.academy/keksobooking/data'
+  };
+
+  var HttpMethod = {
+    POST: 'POST',
+    GET: 'GET'
   };
 
   var HttpCode = {
@@ -18,7 +24,7 @@
   var ErrorMessage = {
     CONNECT: 'Произошла ошибка соединения',
     TIMEOUT: 'Запрос не успел выполниться за ',
-    RESPONSE: 'Статус ответа: '
+    RESPONSE: 'Статус ответа: ',
   };
 
   var setupXHR = function (onLoad, onError) {
@@ -46,13 +52,13 @@
 
   var save = function (onLoad, onError, data) {
     var xhr = setupXHR(onLoad, onError);
-    xhr.open('POST', Url.SAVE);
+    xhr.open(HttpMethod.POST, Url.SAVE);
     xhr.send(data);
   };
 
   var load = function (onLoad, onError) {
     var xhr = setupXHR(onLoad, onError);
-    xhr.open('GET', Url.LOAD);
+    xhr.open(HttpMethod.GET, Url.LOAD);
     xhr.send();
   };
 
