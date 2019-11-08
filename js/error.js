@@ -1,7 +1,10 @@
 'use strict';
 
 (function () {
-  var onErrorHappen = function (message) {
+  var main = window.setup.main;
+  var KeyboardKey = window.setup.KeyboardKey;
+
+  var onAppMistake = function (message) {
     var errorTemplate = document.querySelector('#error')
       .content
       .querySelector('.error');
@@ -12,29 +15,26 @@
     main.appendChild(error);
 
     document.addEventListener('click', onModalPopupClick);
-    document.addEventListener('keydown', onModalPopupEscKeydown);
+    document.addEventListener('keydown', onModalPopupEscPress);
   };
 
   var onModalPopupClick = function () {
     main.lastChild.remove();
     document.removeEventListener('click', onModalPopupClick);
-    document.removeEventListener('keydown', onModalPopupEscKeydown);
+    document.removeEventListener('keydown', onModalPopupEscPress);
   };
 
-  var onModalPopupEscKeydown = function (evt) {
+  var onModalPopupEscPress = function (evt) {
     if (evt.key === KeyboardKey.ESC) {
       main.lastChild.remove();
       document.removeEventListener('click', onModalPopupClick);
-      document.removeEventListener('keydown', onModalPopupEscKeydown);
+      document.removeEventListener('keydown', onModalPopupEscPress);
     }
   };
 
-  var main = window.setup.main;
-  var KeyboardKey = window.setup.KeyboardKey;
-
   window.error = {
-    onErrorHappen: onErrorHappen,
+    onAppMistake: onAppMistake,
     onModalPopupClick: onModalPopupClick,
-    onModalPopupEscKeydown: onModalPopupEscKeydown
+    onModalPopupEscPress: onModalPopupEscPress
   };
 })();

@@ -1,12 +1,15 @@
 'use strict';
 
 (function () {
+  var MEASURE_PX = window.setup.MEASURE_PX;
+  var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
+
   var LimitY = {
     MIN: 130,
     MAX: 630
   };
 
-  var СuspSize = {
+  var PinSize = {
     WIDTH: 65,
     HEIGHT: 87
   };
@@ -16,15 +19,32 @@
     Y: 'y'
   };
 
-  var Coordinate = function (x, y) {
-    this.x = x;
-    this.y = y;
+  var map = window.setup.map;
+  var middlePin = window.setup.middlePin;
+
+  var mapPinMain = window.form.mapPinMain;
+  var onMapPinMainClick = window.form.onMapPinMainClick;
+  var inputAddress = window.form.inputAddress;
+  var onMapPinMainEnterPress = window.form.onMapPinMainEnterPress;
+  var defaultPinLocation = window.form.defaultPinLocation;
+  var getCordsView = window.form.getCordsView;
+  var Coordinate = window.form.Coordinate;
+
+  var pinLocation;
+
+  var mapOverlay = map.querySelector('.map__overlay');
+  var LimitX = {
+    min: 0,
+    max: mapOverlay.offsetWidth
   };
 
   var onMouseDown = function (evt) {
     pinLocation = new Coordinate(mapPinMain.offsetLeft, mapPinMain.offsetTop);
 
-    fillAddress(evt);
+    if (defaultPinLocation.x === pinLocation.x && defaultPinLocation.y === pinLocation.y) {
+      inputAddress.value = getCordsView(defaultPinLocation.x + middlePin.width,
+          defaultPinLocation.y + PinSize.HEIGHT);
+    }
 
     var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
@@ -37,13 +57,13 @@
 
       checkOverLimit(pinLocation, StructureLocation.X, LimitX.max - middlePin.width);
       checkUnderLimit(pinLocation, StructureLocation.X, LimitX.min - middlePin.width);
-      checkOverLimit(pinLocation, StructureLocation.Y, LimitY.MAX - СuspSize.HEIGHT);
-      checkUnderLimit(pinLocation, StructureLocation.Y, LimitY.MIN - СuspSize.HEIGHT);
+      checkOverLimit(pinLocation, StructureLocation.Y, LimitY.MAX - PinSize.HEIGHT);
+      checkUnderLimit(pinLocation, StructureLocation.Y, LimitY.MIN - PinSize.HEIGHT);
 
       mapPinMain.style.left = pinLocation.x + MEASURE_PX;
       mapPinMain.style.top = pinLocation.y + MEASURE_PX;
       inputAddress.value = (pinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
-        (pinLocation.y + СuspSize.HEIGHT);
+        (pinLocation.y + PinSize.HEIGHT);
     };
 
     var onMouseUp = function (upEvt) {
@@ -55,15 +75,6 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  };
-
-  var fillAddress = function (evt) {
-    if (evt.type === 'mousedown') {
-      if (defaultPinLocation.x === pinLocation.x && defaultPinLocation.y === pinLocation.y) {
-        inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
-          (defaultPinLocation.y + СuspSize.HEIGHT);
-      }
-    }
   };
 
   var checkOverLimit = function (position, key, limit) {
@@ -78,30 +89,11 @@
     }
   };
 
-  var map = window.setup.map;
-  var middlePin = window.setup.middlePin;
-  var MEASURE_PX = window.setup.MEASURE_PX;
-  var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
-
-  var mapPinMain = window.form.mapPinMain;
-  var onMapPinMainClick = window.form.onMapPinMainClick;
-  var inputAddress = window.form.inputAddress;
-  var onMapPinMainEnterKeydown = window.form.onMapPinMainEnterKeydown;
-  var defaultPinLocation = window.form.defaultPinLocation;
-
-  var pinLocation;
-
   mapPinMain.addEventListener('mousedown', onMapPinMainClick);
   mapPinMain.addEventListener('mousedown', onMouseDown);
-  mapPinMain.addEventListener('keydown', onMapPinMainEnterKeydown);
+  mapPinMain.addEventListener('keydown', onMapPinMainEnterPress);
 
-  var mapOverlay = map.querySelector('.map__overlay');
-  var LimitX = {
-    min: 0,
-    max: mapOverlay.offsetWidth
-  };
 
-  inputAddress.value = (defaultPinLocation.x + middlePin.width) + PUNCTUATION_COMMA + ' ' +
-    (defaultPinLocation.y + middlePin.height);
-
+  inputAddress.value = getCordsView(defaultPinLocation.x + middlePin.width,
+      defaultPinLocation.y + middlePin.height);
 })();
