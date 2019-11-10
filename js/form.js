@@ -200,8 +200,10 @@
     mapFilters.reset();
     photoPreviewImage.src = DEFAULT_AVATAR_PATH;
     avatarPreviewImage.src = DEFAULT_AVATAR_PATH;
-    inputAddress.value = getCordsView(defaultPinLocation.x + middlePin.width,
-        defaultPinLocation.y + middlePin.height);
+    inputAddress.value = getCordsView(
+        defaultPinLocation.x + middlePin.width,
+        defaultPinLocation.y + middlePin.height
+    );
 
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');

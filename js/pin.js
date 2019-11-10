@@ -14,8 +14,8 @@
   var pointsFilter = window.filter.pointsFilter;
 
   var pinTemplate = document.querySelector('#pin')
-  .content
-  .querySelector('.map__pin');
+    .content
+    .querySelector('.map__pin');
 
   var uploadedPins;
 

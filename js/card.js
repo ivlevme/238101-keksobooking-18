@@ -3,11 +3,6 @@
 (function () {
   var PUNCTUATION_COMMA = window.setup.PUNCTUATION_COMMA;
 
-  var Digit = {
-    ZERO: 0,
-    FOUR: 4
-  };
-
   var OfferPinSchema = {
     TITLE: 'title',
     ADDRESS: 'address',
@@ -52,6 +47,10 @@
   var cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
+
+  var firstCutSymbolPosition = 4;
+  var lastCutSymbolPosition = 5;
+  var emptyPhotosCount = 0;
 
   var card;
   var allFeatures;
@@ -171,9 +170,12 @@
         break;
 
       case OfferPinSchema.PRICE:
-        var priceText = popupPrice.textContent.slice(Digit.ZERO, Digit.FOUR);
-        var newPriceText = data.price;
-        popupPrice.innerHTML = popupPrice.innerHTML.replace(priceText, newPriceText);
+        var currencySign = popupPrice.textContent.slice(
+            firstCutSymbolPosition,
+            lastCutSymbolPosition
+        );
+        popupPrice.removeChild(popupPrice.firstChild);
+        popupPrice.prepend(data.price + currencySign);
         break;
 
       case OfferPinSchema.TYPE:
@@ -235,12 +237,12 @@
 
     photoPlug.remove();
 
-    if (photos.length === Digit.ZERO) {
+    if (photos.length === emptyPhotosCount) {
       popupSchema[OfferPinSchema.PHOTOS].classList.add('hidden');
       return;
     }
 
-    if (photos.length > Digit.ZERO) {
+    if (photos.length > emptyPhotosCount) {
       var fragmentPhotos = document.createDocumentFragment();
       photos.forEach(function (photo) {
         var photoItem = photoPlug.cloneNode(false);
