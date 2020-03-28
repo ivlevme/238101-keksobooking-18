@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var EMPTY_QUANTITY = 0;
+
   var HousingRooms = {
     ONE: 1,
     TWO: 2,
@@ -134,21 +136,15 @@
   };
 
   var checkHousingFeatures = function (data) {
+    var inputFeatures = mapFilterContainer.querySelectorAll('.map__features input[type="checkbox"]:checked');
 
-    var featuresContainer = mapFilterContainer.querySelector('.map__features');
-    var inputFeatures = featuresContainer.querySelectorAll('input[type="checkbox"]');
-    var selectedFeatures = [];
-    inputFeatures.forEach(function (item) {
-      if (item.checked) {
-        selectedFeatures.push(item.value);
-      }
-    });
-
-    selectedFeatures.forEach(function (feature) {
-      data = data.filter(function (item) {
-        return item.offer.features.indexOf(feature) >= 0;
+    if (inputFeatures.length !== EMPTY_QUANTITY) {
+      inputFeatures.forEach(function (feature) {
+        data = data.filter(function (item) {
+          return item.offer.features.indexOf(feature.value) >= 0;
+        });
       });
-    });
+    }
 
     return data;
   };

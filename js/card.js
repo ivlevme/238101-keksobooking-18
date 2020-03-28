@@ -45,8 +45,8 @@
   var popupSchema = {};
 
   var cardTemplate = document.querySelector('#card')
-  .content
-  .querySelector('.map__card');
+    .content
+    .querySelector('.map__card');
 
   var firstCutSymbolPosition = 4;
   var lastCutSymbolPosition = 5;
@@ -145,12 +145,10 @@
   };
 
   var fillElement = function (schema, data) {
-    var prototype = Object.keys(schema);
+    var prototype = Object.values(schema);
     var structurePin = Object.keys(data);
 
     prototype.forEach(function (item) {
-      item = item.toLowerCase();
-
       if (structurePin.includes(item)) {
         return fillBox(item, data);
       }
