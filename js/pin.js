@@ -7,11 +7,11 @@
   var debounce = window.debounce;
 
   var pinsContainer = window.setup.pinsContainer;
-  var delElements = window.setup.delElements;
+  var mapFilterContainer = window.setup.mapFilterContainer;
+  var delElements = window.setup.delElements; // Remove
   var generateCard = window.card.generateCard;
 
-  var verifyFilter = window.filter.verify;
-  var pointsFilter = window.filter.pointsFilter;
+  var filter = window.filter;
 
   var pinTemplate = document.querySelector('#pin')
     .content
@@ -44,7 +44,7 @@
     uploadedPins = pins;
     delElements('.popup');
     delElements('button:not(.map__pin--main)');
-    var filteredData = verifyFilter(uploadedPins);
+    var filteredData = filter(uploadedPins);
     pinsContainer.appendChild(generatePins(filteredData));
   };
 
@@ -54,16 +54,10 @@
     };
   };
 
-  var setListener = function (element) {
-    element.addEventListener('change', function () {
-      debounce(function () {
-        updatePins(uploadedPins);
-      });
+  mapFilterContainer.addEventListener('change', function () {
+    debounce(function () {
+      updatePins(uploadedPins);
     });
-  };
-
-  pointsFilter.forEach(function (item) {
-    setListener(item);
   });
 
   window.pin = {
